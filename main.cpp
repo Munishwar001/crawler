@@ -10,6 +10,8 @@ int main() {
     myList.insertAtEnd(20);
     myList.insertion(50,2);
     myList.pop();
+    myList.DeletefromBeging();
+    myList.Deletion(1);
     myList.print(); 
     // List<string> obj;
     // obj.prepend("Hello");
