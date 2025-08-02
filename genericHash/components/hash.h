@@ -25,6 +25,7 @@ public:
       void search(keyType key);
       void deleteElement(keyType key);
       void display();
-      // void reSize();
+      void reSize();
+      ~Hash();
 };
 #include "functions/hashFunctions.tpp"

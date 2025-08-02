@@ -5,7 +5,8 @@ using namespace std;
 
 template <typename keyType, typename valueType>
 void Hash<keyType, valueType>::insertion(keyType key, valueType value)
-{    
+{
+    reSize();
     int index = getIndex(key, size);
     Node<keyType, valueType> *newNode = new Node<keyType, valueType>(key, value);
     if (head[index] == NULL)
@@ -15,17 +16,48 @@ void Hash<keyType, valueType>::insertion(keyType key, valueType value)
         return;
     }
     Node<keyType, valueType> *current = head[index];
-    while (current->next != NULL && current->key !=key)
+    while (current->next != NULL && current->key != key)
     {
         current = current->next;
     }
-    if(current->key==key){
-        cout<<"key Already Exist"<<endl;
+    if (current->key == key)
+    {
+        cout << "key Already Exist" << endl;
         current->value = value;
         return;
     }
-      noOfElements++;
+    // noOfElements++;
     current->next = newNode;
+}
+
+template <typename keyType, typename valueType>
+void Hash<keyType, valueType>::reSize()
+{
+    int percentage = (noOfElements * 100) / size;
+    if (percentage < 75)
+    {
+        return;
+    }
+    cout << "Resizing the Hash Table" << endl;
+    Node<keyType, valueType> **bucket = head;
+    head = new Node<keyType, valueType> *[size * 2];
+    int temp = size;
+    size = size * 2;
+    for (int i = 0; i < size; i++)
+    {
+        head[i] = NULL;
+    }
+    for (int i = 0; i < temp; i++)
+    {
+        while (bucket[i])
+        {
+            insertion(bucket[i]->key, bucket[i]->value);
+            Node<keyType, valueType> *temp = bucket[i];
+            bucket[i] = bucket[i]->next;
+            delete temp;
+        }
+    }
+    delete[] bucket;
 }
 
 template <typename keyType, typename valueType>
@@ -87,11 +119,28 @@ void Hash<keyType, valueType>::display()
 {
     for (int i = 0; i < size; i++)
     {
-        while (head[i])
+        Node<keyType, valueType> *current = head[i];
+        while (current)
         {
-            cout << "key " << head[i]->key << " value " << head[i]->value;
-            head[i] = head[i]->next;
+            cout << "key " << current->key << " value " << current->value << endl;
+            current = current->next;
         }
     }
     return;
+}
+
+template <typename keyType, typename valueType>
+Hash<keyType, valueType>::~Hash()
+{
+    for (int i = 0; i < size; i++)
+    {
+        Node<keyType, valueType> *current = head[i];
+        while (current != nullptr)
+        {
+            Node<keyType, valueType> *temp = current;
+            current = current->next;
+            delete temp;
+        }
+    }
+    delete[] head;
 }
