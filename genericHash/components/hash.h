@@ -26,6 +26,7 @@ public:
       void deleteElement(keyType key);
       void display();
       void reSize();
+      void insertUsingKey(keyType key);
       ~Hash();
 };
 #include "functions/hashFunctions.tpp"

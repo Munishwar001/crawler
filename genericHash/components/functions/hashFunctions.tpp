@@ -54,9 +54,12 @@ void Hash<keyType, valueType>::reSize()
             insertion(bucket[i]->key, bucket[i]->value);
             Node<keyType, valueType> *temp = bucket[i];
             bucket[i] = bucket[i]->next;
-            delete temp;
+            delete temp; 
         }
-    }
+    } 
+     for(int i = 0 ; i<size ; i++){
+        
+     }
     delete[] bucket;
 }
 
@@ -143,4 +146,28 @@ Hash<keyType, valueType>::~Hash()
         }
     }
     delete[] head;
+}
+
+template <typename keyType, typename valueType>
+void Hash<keyType, valueType>::insertUsingKey(keyType key){
+    int index = getIndex(key, size);
+    Node<keyType, valueType> *newNode = new Node<keyType, valueType>(key, 0); 
+    if (head[index] == NULL)
+    {
+        head[index] = newNode;
+        noOfElements++;
+        return;
+    }
+    Node<keyType, valueType> *current = head[index];
+    while (current->next != NULL && current->key != key)
+    {
+        current = current->next;
+    }
+    if (current->key == key)
+    {
+        // cout << "Key Already Exist" << endl;
+        current->value++;
+        return;
+    }
+    current->next = newNode;
 }

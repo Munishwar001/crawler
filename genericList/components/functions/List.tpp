@@ -132,3 +132,21 @@ void List<T>::Deletion(int index){
     delete temp;
     count--;
 }
+
+template <typename T>
+Node<T>* List<T>::getNode(int index){
+    if(index<0 || index>=count){
+        cout<<"Invalid index";
+        return;
+    }
+    Node<T>* current = head;
+    int position = 0;
+    while(current){
+        if(position==index) {
+            // cout<<current->data<<endl;
+            return current;
+        }
+        position++;
+        current = current->next;
+    }
+}

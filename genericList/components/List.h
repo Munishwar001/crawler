@@ -19,7 +19,19 @@ public:
     void pop();
     void DeletefromBeging();
     void Deletion(int index);
+    Node<T>* getNode(int index);
     void print();
+   ~List(){
+        Node<T>* current = head;
+        while (current != NULL) {
+            Node<T>* nextNode = current->next;
+            delete current;
+            current = nextNode;
+        }
+        head = NULL;
+        count = 0; 
+    }
+   
 };
 
 
