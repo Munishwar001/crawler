@@ -1,0 +1,15 @@
+#include<iostream>
+#include"./crawler/crawler.h"
+using namespace std;
+int main(int argc ,char* argv[]){
+    if(argc<4){
+         cerr<<"please make sure your input is in ./crawler [SEED_URL] [TARGET_DIRECTORY] [MAX_CRAWLING_DEPTH]";
+         return -1;
+    }
+
+     crawler cr(argv[1],argv[2]);
+      cout<< "directory exists"<<cr.directoryExists();
+     // cr.createDir();
+     cr.downloadHTML();
+     // cr.print();
+}

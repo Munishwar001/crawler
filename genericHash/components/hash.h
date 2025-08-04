@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Node.h"
 #include "functions/indexFinder.h"
-using namespace std; // Munishwar tu kar sakta h
+using namespace std; 
 template <typename keyType, typename valueType>
 class Hash
 {

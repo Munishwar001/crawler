@@ -1,6 +1,6 @@
 #include<iostream>
 #include<string.h>
-#include "./genericHash/components/hash.h"
+// #include "./genericHash/components/hash.h"
 using namespace std;
 
 
@@ -164,3 +164,55 @@ int count_words(const char* str) {
 //         word = strtok(NULL, " \n\t");
 //     }
 // }
+int my_strcasestr(char* str, char* sub) {
+    char* lower_str = new char[my_strlen(str) + 1];
+    char* lower_sub = new char[my_strlen(sub) + 1];
+    
+    my_strcpy(lower_str, str);
+    my_strcpy(lower_sub, sub);
+    
+    to_lower(lower_str);
+    to_lower(lower_sub);
+    
+    int index = my_strstr(lower_str, lower_sub);
+    
+    delete[] lower_str;
+    delete[] lower_sub;
+    return index;
+      
+}
+
+void my_strTrim(char* str) {
+    char* end = str + my_strlen(str) - 1;
+
+    while (*str == ' ') str++;
+    while (end > str && *end == ' ') end--;
+
+    *(end + 1) = '\0';
+    
+    char* start = str;
+    while (*start != '\0') {
+        if (*start == ' ' && *(start + 1) == ' ') {
+            char* temp = start + 1;
+            while (*temp != '\0') {
+                *start++ = *temp++;
+            }
+            *start = '\0';
+        } else {
+            start++;
+        }
+    }
+}
+
+
+void my_strTok(char* str) {
+    int i = 0, j = 0;
+    while (str[i] != '\0') {
+        if (str[i] == ',' && str[i + 1] == ' ' && str[i + 2] == ',') {
+            i += 3; 
+        } else {
+            str[j++] = str[i++];
+        }
+    }
+    str[j] = '\0'; 
+}

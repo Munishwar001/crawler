@@ -6,7 +6,7 @@
 #include "../fileHandling/functions.h"
 using namespace std;
 int main()
-{
+{ 
     // task1
     // cout << "Enter the file path: ";
     // char path[50];
@@ -38,8 +38,7 @@ int main()
     writer << info << endl;
     writer.close();
 
-
     //Task4
-    
+     
     return 0;
 }
