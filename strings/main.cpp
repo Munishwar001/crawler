@@ -17,12 +17,15 @@ int main()
         cout << "7. Reverse in Place String\n";
         cout << "8. Check String is Palindrome or NOT\n";
         cout << "9. Count the Number of Words in a String\n";
-        cout<<"10. count the most frequesnt words in a string\n";
+        cout<<"10. check the subString eist or not using lowerCase\n";
+        cout<<"11.  \n";
+        cout<<"12. Remove extra spaces form the string\n";
         cout << "0. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         char str8[] = "Hello World"; 
         char str9[] = "Hello World Hello";
+            char str10[] = "This    is   a   test   string   with  extra spaces.";
         switch (choice)
         {
         case 1:
@@ -129,7 +132,32 @@ int main()
             break;
         case 10:
             // cout << "Most frequent word in the string: " << most_frequent_word(str9) << endl;
+            // if(my_strcasestr(str9, "hello") != -1) {
+            //     cout << "Substring found using case-insensitive search." << endl;
+            // } else {
+            //     cout << "Substring not found using case-insensitive search." << endl;
+            // }
             break;
+         case 11:
+        //       cout<<"Enter sting in the format of csv apple,banana,,cherry";  
+        //     char csvStr[100];
+        //     cin.getline(csvStr, 100);
+        //     cout << "CSV String: " << csvStr << endl;
+        //     char* token ;
+        //     token = my_strTok(csvStr, ",");
+        //     cout << "Tokens in the CSV String: ";
+        //     while (token != NULL) {
+        //        cout << token << " ";
+        //        token = my_strTok(NULL, ",");
+        //     }
+        //      cout<<token ; 
+               break;   
+        case 12:
+            cout << "Enter String to collapse spaces \n";
+            // cin.getline(str10, 100);
+            cout << "Collapsed String: " << my_strCollapse(str10) << endl;
+         break;  
+
         default:
             cout << "Invalid choice, please try again.\n";
             break;

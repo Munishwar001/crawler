@@ -205,14 +205,44 @@ void my_strTrim(char* str) {
 }
 
 
-void my_strTok(char* str) {
-    int i = 0, j = 0;
-    while (str[i] != '\0') {
-        if (str[i] == ',' && str[i + 1] == ' ' && str[i + 2] == ',') {
-            i += 3; 
+// char* my_strTok(char* str, const char* delimiters) {
+//     static char* next_token = nullptr;
+
+//     if (str != nullptr) {
+//         next_token = str;
+//     }
+
+//     if (next_token == nullptr || *next_token == '\0') {
+//         return nullptr;
+//     }
+
+//     char* token_start = next_token;
+
+//     while (*next_token != '\0' && strchr(delimiters, *next_token) == nullptr) {
+//         next_token++;
+//     }
+
+//     if (*next_token != '\0') {
+//         *next_token = '\0';
+//         next_token++;
+//     }
+
+//     return token_start;
+// }
+char *my_strCollapse(char* str){
+    // cout<<"enter in the collapse string function"<<str;
+    int i = 0 , j = 0 ; 
+    while(str[i]!='\0'){
+        if(str[i]==' '||str[i]=='\n' || str[i]=='\t'){
+            if(j > 0 && str[j - 1] != ' ') {
+                str[j++] = ' ';
+            }
+            i++;
         } else {
-            str[j++] = str[i++];
+            str[j] = str[i];
+            j++;
+             i++;
         }
     }
-    str[j] = '\0'; 
+    return str;
 }
