@@ -5,11 +5,16 @@
 #include <filesystem>
 using namespace std;
 class filehandling{
-   char path[100];
+   char path[150];
    public:
-    filehandling(char* path){
-       my_strcpy(this->path , path);
+    // filehandling(char* path){
+    //    my_strcpy(this->path , path);
+    // }
+     filehandling(char* targetDir) {
+        my_strcpy(this->path, "public/");     
+        my_strcat(this->path, targetDir); 
     }
+
    bool dir_exists(){
       if (filesystem::exists(path)) {
         if (filesystem::is_directory(path)) { 

@@ -39,7 +39,8 @@ using namespace std;
         }
         char command[2500];
         char filepath[2200];
-        my_strcpy(filepath, targetDir);
+        my_strcpy(filepath, "public/");
+        my_strcat(filepath, targetDir);
         my_strcat(filepath, "/");
         my_strcat(filepath, filename);
 
