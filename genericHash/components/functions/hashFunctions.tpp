@@ -65,13 +65,13 @@ void Hash<keyType, valueType>::reSize()
 }
 
 template <typename keyType, typename valueType>
-void Hash<keyType, valueType>::search(keyType key)
+int Hash<keyType, valueType>::search(keyType key)
 {
     int index = getIndex(key, size);
     if (head[index] == NULL)
     {
-        cout << "Element not present";
-        return;
+        // cout << "Element not present";
+        return -1;
     }
     Node<keyType, valueType> *current = head[index];
     while (current)
@@ -79,12 +79,12 @@ void Hash<keyType, valueType>::search(keyType key)
         if (current->key == key)
         {
             cout << "value for your key: " << key << " is " << current->value << endl;
-            return;
+            return index;
         }
         current = current->next;
     }
-    cout << "Element not present" << endl;
-    return;
+    // cout << "Element not present" << endl;
+    return -1;
 }
 
 template <typename keyType, typename valueType>

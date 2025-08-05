@@ -5,7 +5,7 @@ using namespace std;
 template <typename T>
 class List
 {
-    Node<T> *head;
+    NodeList<T> *head;
     int count;
 public:
     List()
@@ -19,12 +19,13 @@ public:
     void pop();
     void DeletefromBeging();
     void Deletion(int index);
-    Node<T>* getNode(int index);
+    NodeList<T>* getNode(int index);
+    NodeList<T>* getHead();
     void print();
    ~List(){
-        Node<T>* current = head;
+        NodeList<T>* current = head;
         while (current != NULL) {
-            Node<T>* nextNode = current->next;
+            NodeList<T>* nextNode = current->next;
             delete current;
             current = nextNode;
         }

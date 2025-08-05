@@ -1,11 +1,11 @@
 #include<iostream>
 using namespace std;
 template<typename T>
-class Node{
+class NodeList{
    public:
        T data;
-       Node<T>* next;
-         Node(T data){
+       NodeList<T>* next;
+         NodeList(T data){
             this->data = data ;
             this->next = NULL;
          }

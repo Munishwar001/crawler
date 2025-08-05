@@ -4,8 +4,8 @@ using namespace std;
 int main()
 {   
     cout<<"Enter the size that you want \n";
-    int size1; cin>>size1;
-    Hash<int, int> myHash(size1); 
+    // int size1; cin>>size1;
+    Hash<char *, int> myHash; 
     int choice;
     do{
     cout<<"********SELECT CHOICES*********\n";
@@ -17,7 +17,8 @@ int main()
     cin>>choice;
     switch(choice){
         case 1:
-            int key, value;
+            char* key;
+            int  value;
             cout<<"Enter the key and value to insert\n";
             cin>>key>>value;
             myHash.insertion(key, value);

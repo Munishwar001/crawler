@@ -11,9 +11,9 @@ class Hash
       int size;
 
 public:
-      Hash(int size)
+      Hash( )
       {
-            this->size = size;
+            this->size =2;
             this->head = new Node<keyType, valueType> *[size];
             this->noOfElements = 0 ; 
             for (int i = 0; i < size; i++)
@@ -22,7 +22,7 @@ public:
             }
       }
       void insertion(keyType key, valueType value);
-      void search(keyType key);
+      int search(keyType key);
       void deleteElement(keyType key);
       void display();
       void reSize();

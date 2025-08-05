@@ -5,7 +5,7 @@ using namespace std;
 template <typename T>
 void List<T>::print()
 {
-    Node<T> *current = head; 
+    NodeList<T> *current = head; 
     cout<<"size of list is "<<count<<"\n";
     if (head == NULL)
     {
@@ -22,7 +22,7 @@ void List<T>::print()
 template <typename T>
 void List<T>::prepend(T data)
 {
-    Node<T> *newNode = new Node(data);
+    NodeList<T> *newNode = new NodeList(data);
     count++;
     if (head == NULL)
     {
@@ -36,14 +36,14 @@ void List<T>::prepend(T data)
 template <typename T>
 void List<T>::insertAtEnd(T data)
     {
-        Node<T> *newNode = new Node(data);
+        NodeList<T> *newNode = new NodeList(data);
         count++;
         if (head == NULL)
         {
             head = newNode;
             return;
         }
-        Node<T> *current = head;
+        NodeList<T> *current = head;
         while (current->next != NULL)
         {
             current = current->next;
@@ -58,14 +58,14 @@ void List<T>::insertion(T data , int index){
         return;
      }
      int position = 0 ;
-     Node<T> *newNode = new Node(data);
-     Node<T> *current = head;
+     NodeList<T> *newNode = new NodeList(data);
+     NodeList<T> *current = head;
     while(current){
          position++;
          if(position==index-1) break;
          current = current->next;
     }
-    Node<T> *temp =  current->next;
+    NodeList<T> *temp =  current->next;
     current->next = newNode;
     newNode->next = temp; 
 }    
@@ -81,7 +81,7 @@ void List<T>::pop(){
         head = NULL;
         return;
     }
-    Node<T>* current = head;
+    NodeList<T>* current = head;
     while (current->next->next != NULL) {
         current = current->next;
     }
@@ -96,7 +96,7 @@ void List<T>::DeletefromBeging(){
         cout<<"List is already Empty";
         return ;
     }
-    Node<T>* temp = head;
+    NodeList<T>* temp = head;
     head = head->next;
     delete temp;
     count--;
@@ -116,7 +116,7 @@ void List<T>::Deletion(int index){
         DeletefromBeging();
         return;
     }
-    Node<T>* current = head;
+    NodeList<T>* current = head;
     int position = 0;
 
     while (current && position < index - 1) {
@@ -127,19 +127,24 @@ void List<T>::Deletion(int index){
         cout << "Index out of bounds" << endl;
         return;
     }
-    Node<T>* temp = current->next;
+    NodeList<T>* temp = current->next;
     current->next = temp->next;
     delete temp;
     count--;
 }
 
 template <typename T>
-Node<T>* List<T>::getNode(int index){
+NodeList<T>* List<T>::getHead( ){
+    return head;    
+}
+
+template <typename T>
+NodeList<T>* List<T>::getNode(int index){
     if(index<0 || index>=count){
         cout<<"Invalid index";
-        return;
+        return nullptr;
     }
-    Node<T>* current = head;
+    NodeList<T>* current = head;
     int position = 0;
     while(current){
         if(position==index) {

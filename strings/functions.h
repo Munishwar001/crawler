@@ -263,3 +263,14 @@ int stringToInt(const char* str) {
     
     return result;
 }
+bool isHtmlResource(char* url) {
+     char* invalid_ext[] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico",".asp" };
+    int count = sizeof(invalid_ext) / sizeof(invalid_ext[0]);
+    
+    for (char* i : invalid_ext) {
+        if (my_strstr(url, i) != -1) {
+            return false; 
+        }
+    }
+    return true;  
+}
