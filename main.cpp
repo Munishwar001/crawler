@@ -7,7 +7,7 @@ int main(int argc ,char* argv[]){
          return -1;
     }
 
-     crawler cr(argv[1],argv[2]);
+     crawler cr(argv[1],argv[2] ,argv[3]);
       cout<< "directory exists"<<cr.directoryExists();
      // cr.createDir();
      cr.downloadHTML();

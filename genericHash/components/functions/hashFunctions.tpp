@@ -5,9 +5,15 @@ using namespace std;
 
 template <typename keyType, typename valueType>
 void Hash<keyType, valueType>::insertion(keyType key, valueType value)
-{
-    reSize();
+{ 
     int index = getIndex(key, size);
+    int percentage = (noOfElements * 100) / size;
+    cout<< "Percentage of elements in the Hash Table: " << percentage << "%" << endl;
+    cout<<"noOfElements: "<<noOfElements<<"size"<< size<<endl; 
+    if (percentage > 75)
+    {
+        reSize();
+    }
     Node<keyType, valueType> *newNode = new Node<keyType, valueType>(key, value);
     if (head[index] == NULL)
     {
@@ -28,21 +34,19 @@ void Hash<keyType, valueType>::insertion(keyType key, valueType value)
     }
     // noOfElements++;
     current->next = newNode;
+    
 }
 
 template <typename keyType, typename valueType>
 void Hash<keyType, valueType>::reSize()
 {
-    int percentage = (noOfElements * 100) / size;
-    if (percentage < 75)
-    {
-        return;
-    }
+    
     cout << "Resizing the Hash Table" << endl;
     Node<keyType, valueType> **bucket = head;
     head = new Node<keyType, valueType> *[size * 2];
     int temp = size;
     size = size * 2;
+    noOfElements = 0;
     for (int i = 0; i < size; i++)
     {
         head[i] = NULL;
@@ -57,9 +61,6 @@ void Hash<keyType, valueType>::reSize()
             delete temp; 
         }
     } 
-     for(int i = 0 ; i<size ; i++){
-        
-     }
     delete[] bucket;
 }
 
