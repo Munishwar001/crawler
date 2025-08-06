@@ -1,3 +1,4 @@
+
 #include <cstdlib>
 #include <cstdio>
 #include <string.h>
@@ -13,18 +14,17 @@ class crawler
     int max_depth;
     int current_depth;
     filehandling *fp;
-    Hash<char *, bool> myHash;
+    Hash<char *, char*> myHash;
     List<char *> myList;
-    // Node<char*, int> *headURL;
 
 public:
-    crawler(char *url, char *targetDir, char *max_depth = "1")
+    crawler(char *url, char *targetDir, char *max_depth)
     {
         my_strcpy(this->url, url);
         my_strcpy(this->targetDir, targetDir);
         this->max_depth = stringToInt(max_depth);
         this->fp = new filehandling(this->targetDir);
-        current_depth = 0;
+        // current_depth = 0;
     }
     bool directoryExists()
     {
@@ -38,34 +38,39 @@ public:
             fp->dir_create();
         }
     }
-    bool validateURL()
+    bool validateURL(char *urlToCheck)
     {
-        if (my_strlen(url) > 0 && my_strchr(url, '/') != -1)
+        char validation[3000];
+        my_strcpy(validation, "wget --spider -q ");
+        my_strcat(validation, urlToCheck);
+        if (system(validation) == 0)
         {
             return true;
         }
-        cout << "Invalid URL: " << url << endl;
+        // cout << "Invali url";
         return false;
     }
 
-    void extractLinksFromFile(char *filepath)
+    void extractLinksFromFile(char *filepath, int depth)
     {
-        cout << "Extracting links from file: " << filepath << endl;
+        if (depth >= max_depth)
+            return;
+
         ifstream file(filepath);
-        cout << "before opening" << endl;
         if (!file.is_open())
         {
             cerr << "Failed to open file.\n";
             return;
         }
+
         char ch;
         int i = 0;
         while (file.get(ch))
         {
-            // cout << ch;
             char url[2800];
             int urlLength = 0;
             char startURL[] = "href=";
+
             if (ch == startURL[i])
             {
                 i++;
@@ -74,101 +79,103 @@ public:
             {
                 i = 0;
             }
+
             if (startURL[i] == '\0')
             {
                 while (file.get(ch))
                 {
                     if (ch == '"' || ch == '\'')
-                    {
                         break;
-                    }
                 }
+
                 while (file.get(ch))
                 {
                     if (ch == '"' || ch == '\'')
-                    {
                         break;
-                    }
-                    //   cout<<"forming the url";
-                    url[urlLength] = ch;
-                    urlLength++;
+                    url[urlLength++] = ch;
                 }
+
                 url[urlLength] = '\0';
                 if (isHtmlResource(url))
-                {
-                    //  myList.insertAtEnd(url);
-                    if (myHash.search(url) != -1)
-                    {   
-                        myHash.insertion(url,false);
-                        myList.insertAtEnd(url);
-                        my_strcpy(this->url, url);
-                        this->current_depth++;
-                        this->crawl();
-                    }
-                    // cout << url << endl;
+                {    
+                    crawl(url, depth + 1);
                 }
-                i = 0;
+                else
+                {
+                    i = 0;
+                }
             }
         }
     }
 
-    void downloadHTML()
+    char *downloadHTML(char *urlToDownload)
     {
         createDir();
-        if (!validateURL())
+        if (!validateURL(urlToDownload))
         {
             cout << "Invalid URL. Cannot download HTML." << endl;
-            return;
+            return NULL;
         }
+
+        static char filepath[2200];
+        static char filename[200];
         char command[2500];
-        char filepath[2200];
-        char filename[200];
         clock_t currentTime = time(0);
         sprintf(filename, "%ld.html", currentTime);
+
         my_strcpy(filepath, "public/");
         my_strcat(filepath, targetDir);
         my_strcat(filepath, "/");
         my_strcat(filepath, filename);
 
-        sprintf(command, "wget -O \"%s\" \"%s\"", filepath, url);
+sprintf(command, "wget -q -O \"%s\" \"%s\"", filepath, urlToDownload);
 
-        cout << "Executing:" << command << endl;
+        // cout << "Executing:" << command << endl;
         int result = system(command);
         if (result != 0)
         {
-            cout << "Error downloading HTML from " << url << endl;
+            cout << "Error downloading HTML from " << urlToDownload << endl;
+            return NULL;
         }
         else
         {
             cout << "HTML downloaded successfully to " << filepath << endl;
-            extractLinksFromFile(filepath);
+            return filepath;
         }
     }
-    void crawl()
+
+    void crawl(char *currentUrl, int depth)
     {
-        if (current_depth > max_depth)
-        {
+        // cout<< "DEPTH : " << depth;
+        if (depth >= max_depth || !validateURL(currentUrl))
             return;
-        }
-        //   myList.insertAtEnd(url);
-        cout<<"url in crawler"<<url; 
-        if (myHash.search(url) != -1)
+          
+        if (myHash.search(currentUrl) != -1)
         {
-            cout << "Already visited: " << url << endl;
+            // cout << "\nAlready visited: " << currentUrl << endl;
             return;
         }
         
-        myHash.insertion(url, true);
-        myList.insertAtEnd(url); 
-        
-        current_depth++;
-        downloadHTML();
-        // Node<char*>* temp = myList.getHead();
-        if (current_depth < max_depth)
+        char *filepath = downloadHTML(currentUrl);
+        myHash.insertion(currentUrl, filepath);
+        cout<<"\n depth: "<<depth<<" currentURL :"<<currentUrl;
+        myList.insertAtEnd(currentUrl);
+        if (filepath != NULL)
         {
-            crawl();
+            extractLinksFromFile(filepath, depth);
         }
     }
+
+    void start()
+    {
+        if (!validateURL(url))
+        {
+            cout << "Your url is not valid " << url;
+            return;
+        }
+        crawl(url, 0);
+    }
+
     void print()
     {
         cout << "\nurl" << url;

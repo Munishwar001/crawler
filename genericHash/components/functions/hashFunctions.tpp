@@ -5,11 +5,11 @@ using namespace std;
 
 template <typename keyType, typename valueType>
 void Hash<keyType, valueType>::insertion(keyType key, valueType value)
-{ 
+{
     int index = getIndex(key, size);
     int percentage = (noOfElements * 100) / size;
-    cout<< "Percentage of elements in the Hash Table: " << percentage << "%" << endl;
-    cout<<"noOfElements: "<<noOfElements<<"size"<< size<<endl; 
+    // cout << "Percentage of elements in the Hash Table: " << percentage << "%" << endl;
+    // cout << "noOfElements: " << noOfElements << "size" << size << endl;
     if (percentage > 75)
     {
         reSize();
@@ -34,13 +34,12 @@ void Hash<keyType, valueType>::insertion(keyType key, valueType value)
     }
     // noOfElements++;
     current->next = newNode;
-    
 }
 
 template <typename keyType, typename valueType>
 void Hash<keyType, valueType>::reSize()
 {
-    
+
     cout << "Resizing the Hash Table" << endl;
     Node<keyType, valueType> **bucket = head;
     head = new Node<keyType, valueType> *[size * 2];
@@ -58,9 +57,9 @@ void Hash<keyType, valueType>::reSize()
             insertion(bucket[i]->key, bucket[i]->value);
             Node<keyType, valueType> *temp = bucket[i];
             bucket[i] = bucket[i]->next;
-            delete temp; 
+            delete temp;
         }
-    } 
+    }
     delete[] bucket;
 }
 
@@ -78,7 +77,7 @@ int Hash<keyType, valueType>::search(keyType key)
     {
         if (current->key == key)
         {
-            cout << "value for your key: " << key << " is " << current->value << endl;
+            // cout << "value for your key: " << key << " is " << current->value << endl;
             return index;
         }
         current = current->next;
@@ -150,9 +149,10 @@ Hash<keyType, valueType>::~Hash()
 }
 
 template <typename keyType, typename valueType>
-void Hash<keyType, valueType>::insertUsingKey(keyType key){
+void Hash<keyType, valueType>::insertUsingKey(keyType key)
+{
     int index = getIndex(key, size);
-    Node<keyType, valueType> *newNode = new Node<keyType, valueType>(key, 0); 
+    Node<keyType, valueType> *newNode = new Node<keyType, valueType>(key, 0);
     if (head[index] == NULL)
     {
         head[index] = newNode;

@@ -12,7 +12,9 @@ int main(int argc ,char* argv[]){
      // cr.createDir();
      // cr.downloadHTML();
      // cr.crawlWithURL(argv[1]);
-     cr.crawl();
+     // cr.crawl();
+     // cr.validateURL(argv[1]);
+     cr.start();
      // cr.extractLinksFromFile("public/storage/1754304723.html");
      // cr.print();
 }
