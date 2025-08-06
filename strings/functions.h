@@ -263,15 +263,80 @@ int stringToInt(const char* str) {
     
     return result;
 }
+// bool isHtmlResource(char* url) {
+//      char* invalid_ext[] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico",".asp",".woff2",".woff" , ".webmanifest"};
+//     int count = sizeof(invalid_ext) / sizeof(invalid_ext[0]);
+    
+//     for (char* i : invalid_ext) {
+//         if (my_strstr(url, i) != -1) {
+//             return false; 
+//         }
+//     }
+//     return true;  
+// }
 bool isHtmlResource(char* url) {
-     char* invalid_ext[] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico",".asp",".woff2",".woff" , ".webmanifest"};
+    char invalid_ext[][15] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico", ".asp", ".woff2", ".woff", ".webmanifest" };
+    
     int count = sizeof(invalid_ext) / sizeof(invalid_ext[0]);
     
-    for (char* i : invalid_ext) {
-        if (my_strstr(url, i) != -1) {
-            return false; 
+    for (int i = 0; i < count; i++) {
+        if (my_strstr(url, invalid_ext[i]) != -1) {
+            return false;
         }
     }
-    return true;  
+    
+    return true;
 }
+
+char* normalizeURL(char* baseURL,  char* relativeURL) {
+      char result[2083];
+
+    if (my_strstr(relativeURL, (char*)"http://") == 0 || my_strstr(relativeURL, (char*)"https://") == 0) {
+        my_strcpy(result, (char*)relativeURL);
+        return result;
+    }
+
+    if (relativeURL[0] == '/') {
+        int idx = my_strstr(baseURL, (char*)"://");
+        if (idx == -1) return NULL;
+        idx += 3;
+
+        int i = idx;
+        while (baseURL[i] != '/' && baseURL[i] != '\0') {
+            i++;
+        }
+
+        for (int j = 0; j < i; j++) {
+            result[j] = baseURL[j];
+        }
+        result[i] = '\0';
+
+        my_strcat(result, (char*)relativeURL);
+        return result;
+    }
+
+    int len = my_strlen(baseURL);
+    int lastSlash = -1;
+
+    for (int i = len - 1; i >= 0; i--) {
+        if (baseURL[i] == '/') {
+            lastSlash = i;
+            break;
+        }
+    }
+
+    if (lastSlash != -1) {
+        for (int i = 0; i <= lastSlash; i++) {
+            result[i] = baseURL[i];
+        }
+        result[lastSlash + 1] = '\0';
+    } else {
+        my_strcpy(result,baseURL);
+        my_strcat(result, (char*)"/");
+    }
+
+    my_strcat(result, relativeURL);
+    return result;
+}
+
 

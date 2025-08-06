@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <string.h>
-// #include "../genericList/components/List.h"
 #include "../genericList/components/List.h"
 #include "../genericHash/components/hash.h"
 #include "../fileHandling/components/fileHandling.h"
@@ -51,7 +50,7 @@ public:
         return false;
     }
 
-    void extractLinksFromFile(char *filepath, int depth)
+void extractLinksFromFile(char *filepath, int depth, char* baseURL)
     {
         if (depth >= max_depth)
             return;
@@ -98,7 +97,11 @@ public:
                 url[urlLength] = '\0';
                 if (isHtmlResource(url))
                 {    
-                    crawl(url, depth + 1);
+                    if (isHtmlResource(url)) {
+                    char* normalized = normalizeURL(baseURL, url);
+                    if (normalized != NULL)
+                    crawl(normalized, depth + 1);
+                     }
                 }
                 else
                 {
@@ -162,7 +165,8 @@ sprintf(command, "wget -q -O \"%s\" \"%s\"", filepath, urlToDownload);
         myList.insertAtEnd(currentUrl);
         if (filepath != NULL)
         {
-            extractLinksFromFile(filepath, depth);
+            extractLinksFromFile(filepath, depth,currentUrl);
+
         }
     }
 
