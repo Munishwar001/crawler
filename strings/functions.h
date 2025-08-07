@@ -1,6 +1,9 @@
 #include<iostream>
 #include<string.h>
-// #include "./genericHash/components/hash.h"
+#include <filesystem>
+
+#include <fstream>
+// #include "genericHash/components/hash.h"
 using namespace std;
 
 
@@ -205,30 +208,31 @@ void my_strTrim(char* str) {
 }
 
 
-// char* my_strTok(char* str, const char* delimiters) {
-//     static char* next_token = nullptr;
+char* my_strTok(char* str, const char* delimiters) {
+    static char* next_token = nullptr;
 
-//     if (str != nullptr) {
-//         next_token = str;
-//     }
+    if (str != nullptr) {
+        next_token = str;
+    }
 
-//     if (next_token == nullptr || *next_token == '\0') {
-//         return nullptr;
-//     }
+    if (next_token == nullptr || *next_token == '\0') {
+        return nullptr;
+    }
 
-//     char* token_start = next_token;
+    char* token_start = next_token;
 
-//     while (*next_token != '\0' && strchr(delimiters, *next_token) == nullptr) {
-//         next_token++;
-//     }
+    while (*next_token != '\0' && strchr(delimiters, *next_token) == nullptr) {
+        next_token++;
+    }
 
-//     if (*next_token != '\0') {
-//         *next_token = '\0';
-//         next_token++;
-//     }
+    if (*next_token != '\0') {
+        *next_token = '\0';
+        next_token++;
+    }
 
-//     return token_start;
-// }
+    return token_start;
+}
+
 char *my_strCollapse(char* str){
     // cout<<"enter in the collapse string function"<<str;
     int i = 0 , j = 0 ; 
@@ -263,17 +267,7 @@ int stringToInt(const char* str) {
     
     return result;
 }
-// bool isHtmlResource(char* url) {
-//      char* invalid_ext[] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico",".asp",".woff2",".woff" , ".webmanifest"};
-//     int count = sizeof(invalid_ext) / sizeof(invalid_ext[0]);
-    
-//     for (char* i : invalid_ext) {
-//         if (my_strstr(url, i) != -1) {
-//             return false; 
-//         }
-//     }
-//     return true;  
-// }
+
 bool isHtmlResource(char* url) {
     char invalid_ext[][15] = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".css", ".js", ".svg", ".ico", ".asp", ".woff2", ".woff", ".webmanifest" };
     
@@ -289,7 +283,7 @@ bool isHtmlResource(char* url) {
 }
 
 char* normalizeURL(char* baseURL,  char* relativeURL) {
-      char result[2083];
+    static  char result[2083];
 
     if (my_strstr(relativeURL, (char*)"http://") == 0 || my_strstr(relativeURL, (char*)"https://") == 0) {
         my_strcpy(result, (char*)relativeURL);
@@ -339,4 +333,68 @@ char* normalizeURL(char* baseURL,  char* relativeURL) {
     return result;
 }
 
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+// Assume your to_lower and my_strstr are defined as above
+
+void removeHTMLTags(const char* input, char* output) {
+    int i = 0, j = 0;
+    bool insideTag = false;
+    bool skipContent = false;
+    char tagBuffer[64];
+    char lowerTag[64];
+
+    while (input[i]) {
+        if (input[i] == '<') {
+            insideTag = true;
+
+            // Collect full tag into buffer
+            int k = 0;
+            int temp = i + 1;  // Skip '<'
+            while (input[temp] && input[temp] != '>' && k < sizeof(tagBuffer) - 1) {
+                tagBuffer[k++] = input[temp++];
+            }
+            tagBuffer[k] = '\0';
+
+            to_lower(lowerTag);
+            to_lower(tagBuffer);
+            // Check for start of <script> or <style>
+            if (my_strstr(lowerTag, "script") == 0 || my_strstr(lowerTag, "style") == 0) {
+                skipContent = true;
+            }
+
+            // Check for end of </script> or </style>
+            if (my_strstr(lowerTag, "/script") == 0 || my_strstr(lowerTag, "/style") == 0) {
+                skipContent = false;
+            }
+
+        } else if (input[i] == '>') {
+            insideTag = false;
+        } else if (!insideTag && !skipContent) {
+            output[j++] = input[i];
+        }
+        i++;
+    }
+    output[j] = '\0';
+}
+
+
+
+bool isHelpingWord(const char* word) {
+    const char* stopWords[] = {
+        "is", "a", "the", "in", "at", "on", "of", "for", "with", "and", "but", "or", "an", "as",
+        "to", "by", "was", "were", "are", "be", "this", "that", "these", "those", "it", "its",
+        "from", "has", "have", "had", "not", "can", "will", "would", "could", "should", "do",
+        "does", "did", NULL
+    };
+
+    for (int i = 0; stopWords[i] != NULL; ++i) {
+        if (strcmp(word, stopWords[i]) == 0)
+            return true;
+    }
+    return false;
+}
 

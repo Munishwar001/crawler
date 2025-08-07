@@ -8,13 +8,15 @@ int main(int argc ,char* argv[]){
     }
 
      crawler cr(argv[1],argv[2] ,argv[3]);
-      cout<< "directory exists"<<cr.directoryExists();
+     //  cout<< "directory exists"<<cr.directoryExists();
      // cr.createDir();
      // cr.downloadHTML();
      // cr.crawlWithURL(argv[1]);
      // cr.crawl();
      // cr.validateURL(argv[1]);
+     // public/munish/1754560830.html
      cr.start();
+     // cr.countFileWordFrequencies((char*)"public/munish/1754560830.html");
      // cr.extractLinksFromFile("public/storage/1754304723.html");
      // cr.print();
 }

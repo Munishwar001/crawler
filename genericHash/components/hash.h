@@ -27,6 +27,7 @@ public:
       void display();
       void reSize();
       void insertUsingKey(keyType key);
+      int increment(keyType key);
       ~Hash();
 };
 #include "functions/hashFunctions.tpp"

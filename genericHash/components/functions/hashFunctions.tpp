@@ -172,3 +172,24 @@ void Hash<keyType, valueType>::insertUsingKey(keyType key)
     }
     current->next = newNode;
 }
+
+
+template <typename keyType, typename valueType>
+int Hash<keyType, valueType>::increment(keyType key){ 
+    int index = getIndex(key, size);
+    if (head[index] == NULL)
+    {
+        return -1;
+    }
+    Node<keyType, valueType> *current = head[index];
+    while (current)
+    {
+        if(strcmp(current->key, key) == 0)
+        {
+              current->value++;
+            return current->value;
+        }
+        current = current->next;
+    }
+    return -1;
+}
