@@ -28,7 +28,7 @@ void Hash<keyType, valueType>::insertion(keyType key, valueType value)
     }
     if (current->key == key)
     {
-        cout << "key Already Exist" << endl;
+        // cout << "key Already Exist" << endl;
         current->value = value;
         return;
     }

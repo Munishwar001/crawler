@@ -181,15 +181,15 @@ void countFileWordFrequencies(char *filepath)
                 int index = wordFreq.search(token);
                 if (index == -1)
                 {
-                    char *wordCopy = new char[strlen(token) + 1];
-                    strcpy(wordCopy, token);
-                    wordFreq.insertion(wordCopy, 1);
+                    // char *wordCopy = new char[strlen(token) + 1];
+                    // strcpy(wordCopy, token);
+                    wordFreq.insertion(token, 1);
                     if (highestCount < 1)
                     {
                         highestCount = 1;
                         strcpy(mostFrequentWord, token);
                     }
-                    delete[] wordCopy;
+                    // delete[] wordCopy;
                 }
                 else
                 {
