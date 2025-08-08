@@ -333,44 +333,33 @@ char* normalizeURL(char* baseURL,  char* relativeURL) {
     return result;
 }
 
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <ctype.h>
 
-// Assume your to_lower and my_strstr are defined as above
-
-void removeHTMLTags(const char* input, char* output) {
+void removeHTMLTags(char* input, char* output,bool& skipContent) {
     int i = 0, j = 0;
     bool insideTag = false;
-    bool skipContent = false;
-    char tagBuffer[64];
-    char lowerTag[64];
+    char tagBuffer[200000];
 
     while (input[i]) {
         if (input[i] == '<') {
             insideTag = true;
 
-            // Collect full tag into buffer
             int k = 0;
-            int temp = i + 1;  // Skip '<'
-            while (input[temp] && input[temp] != '>' && k < sizeof(tagBuffer) - 1) {
+            int temp = i + 1;
+            while (input[temp] && input[temp] != '>' && k < sizeof(tagBuffer)/sizeof(char) - 1) {
                 tagBuffer[k++] = input[temp++];
-            }
+
+            } 
             tagBuffer[k] = '\0';
-
-            to_lower(lowerTag);
+            // cout<<"tagBuffer"<<tagBuffer<<endl;
             to_lower(tagBuffer);
-            // Check for start of <script> or <style>
-            if (my_strstr(lowerTag, "script") == 0 || my_strstr(lowerTag, "style") == 0) {
+            if (my_strstr(tagBuffer, (char*)"script") == 0 || my_strstr(tagBuffer, (char*)"style") == 0) {
                 skipContent = true;
+                
             }
 
-            // Check for end of </script> or </style>
-            if (my_strstr(lowerTag, "/script") == 0 || my_strstr(lowerTag, "/style") == 0) {
+            if (my_strstr(tagBuffer, (char*)"/script") == 0 || my_strstr(tagBuffer,(char*)"/style") == 0) {
                 skipContent = false;
             }
-
         } else if (input[i] == '>') {
             insideTag = false;
         } else if (!insideTag && !skipContent) {
@@ -382,15 +371,16 @@ void removeHTMLTags(const char* input, char* output) {
 }
 
 
-
-bool isHelpingWord(const char* word) {
+bool isHelpingWord(char* word) {
     const char* stopWords[] = {
         "is", "a", "the", "in", "at", "on", "of", "for", "with", "and", "but", "or", "an", "as",
         "to", "by", "was", "were", "are", "be", "this", "that", "these", "those", "it", "its",
-        "from", "has", "have", "had", "not", "can", "will", "would", "could", "should", "do",
-        "does", "did", NULL
+        "from", "has", "have", "had", "not", "can", "will", "would", "could", "should", "do","|",
+        "does", "did","we","We","&", NULL
     };
-
+    if(my_strlen(word)<=3){
+        return true;
+    }
     for (int i = 0; stopWords[i] != NULL; ++i) {
         if (strcmp(word, stopWords[i]) == 0)
             return true;

@@ -146,55 +146,37 @@ public:
         }
     }
 
-    void countFileWordFrequencies(char *filepath)
+   
+void countFileWordFrequencies(char *filepath)
+{
+    ifstream file(filepath);
+    if (!file.is_open())
     {
-        ifstream file(filepath);
-        //  cout<<"\nfilepath in countFileWord"<<filepath<<endl;
-        if (!file.is_open())
-        {
-            cerr << "Failed to open file .\n";
-            return;
-        }
-        // cout<<"\n\n file is open \n\n";
-        char line[5000];
-        char cleanedLine[5000];
-        char cleanedContent[200000] = {0};
-        int contentIndex = 0;
+        cerr << "Failed to open file.\n";
+        return;
+    }
+    // cout<<"inside the file"<<filepath;
+    char line[5000];
+    char cleanedLine[5000];
 
-        while (file.getline(line, sizeof(line)))
-        {
-            // cout<<"line in the "<<line;
-            removeHTMLTags(line, cleanedLine);
-            // cout<<"\ncleanedLine"<<cleanedLine<<"\n";
-            int len = strlen(cleanedLine);
-            if (contentIndex + len + 1 < sizeof(cleanedContent))
-            {
-                my_strcpy(&cleanedContent[contentIndex], cleanedLine);
-                contentIndex += len;
-                cleanedContent[contentIndex++] = ' ';
-            }
-        }
-        cleanedContent[contentIndex] = '\0';
-        // cout<<"\ncleanedContent"<<cleanedContent;
-        //   return ;
-        // file.close();
+    Hash<char *, int> wordFreq;
+    char mostFrequentWord[100] = "";
+    int highestCount = 0;
 
-        Hash<char *, int> wordFreq;
-
-        char *token = strtok(cleanedContent, " \t\n\r.,;:!?()[]{}<>\"\'");
-        // cout<<"\ntoken"<<token<<endl;
-        char mostFrequentWord[100] = "";
-        int highestCount = 0;
-       ofstream debugFile("debug_tokens.txt", ios::app);
-       debugFile << "\n====================================\n";
-    debugFile << "Processing file: " << filepath << endl;
-    debugFile << "====================================\n";
+    ofstream debugFile("debug_tokens.txt", ios::app);
+    debugFile << "file: " << filepath << endl;
+    bool skipContent = false;
+    while (file.getline(line, sizeof(line)))
+    {
+        removeHTMLTags(line, cleanedLine ,skipContent);
+        if(cleanedLine == NULL || cleanedLine=="") continue;
+        char *token = strtok(cleanedLine, " \t\n\r.,;:!?()[]{}<>\"\'");
+        // cout<<"token"<<token<<endl;
         while (token != NULL)
         {
             to_lower(token);
             if (!isHelpingWord(token))
             {
-                // cout<<token;
                 debugFile << token << endl;
                 int index = wordFreq.search(token);
                 if (index == -1)
@@ -205,33 +187,33 @@ public:
                     if (highestCount < 1)
                     {
                         highestCount = 1;
-                        my_strcpy(mostFrequentWord, token);
+                        strcpy(mostFrequentWord, token);
                     }
+                    delete[] wordCopy;
                 }
                 else
                 {
                     int currCount = wordFreq.increment(token);
-                    cout << "\ncurrent count" << currCount << endl;
                     if (currCount > highestCount)
                     {
                         highestCount = currCount;
                         strcpy(mostFrequentWord, token);
                     }
                 }
-            }
-            // cout<<"\n"<<token<<endl;
+            } 
+            // cout<<"token"<<token<<endl;
             token = strtok(NULL, " \t\n\r.,;:!?()[]{}<>\"\'");
         }
-         debugFile << "Finished processing: " << filepath << endl;
-    debugFile << "====================================\n\n";
+    }
 
     debugFile.close();
     file.close();
-        if (highestCount > 0)
-        {
-            cout << "\n Most Frequent Word" << mostFrequentWord << endl;
-        }
+
+    if (highestCount > 0)
+    {
+        cout << "\n Most Frequent Word: " << mostFrequentWord << "\n";
     }
+}
 
     void crawl(char *currentUrl, int depth)
     {
